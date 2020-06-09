@@ -10,27 +10,8 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include "Node.h"
 using namespace std;
-template <typename TipoGen>
-class DobleLinkedList;
-
-template <typename TipoGen>
-class Node
-{
-private:
-    TipoGen data;
-    Node<TipoGen> *next;
-    Node<TipoGen> *prev;
-    friend class DobleLinkedList<TipoGen>;
-
-public:
-    Node(TipoGen _data, Node<TipoGen> *_next = NULL, Node<TipoGen> *_prev = NULL)
-    {
-        data = _data;
-        next = _next;
-        prev = _prev;
-    }
-};
 
 template <typename TipoGen>
 class DobleLinkedList
@@ -56,12 +37,11 @@ public:
         }
         else
         {
-            _new->next = beginning;
-            beginning->prev = _new;
+            _new->ChildRight = beginning;
+            beginning->ChildLeft = _new;
             beginning = _new;
         }
         ++size;
-
     }
 
     void FinalAddition(TipoGen v)
@@ -73,8 +53,8 @@ public:
         }
         else
         {
-            end->next = _new;
-            _new->prev = end;
+            end->ChildRight = _new;
+            _new->ChildLeft = end;
             end = _new;
         }
         ++size;
@@ -86,32 +66,30 @@ public:
         Node<TipoGen> *_new = new Node<TipoGen>(v);
         for (size_t i = 0; i < p - 1; ++i)
         {
-            aux = aux->next;
+            aux = aux->ChildRight;
         }
 
-        _new->next = aux->next;
-        _new->prev = aux;
-        aux->next->prev = _new;
-        aux->next = _new;
+        _new->ChildRight = aux->ChildRight;
+        _new->ChildLeft = aux;
+        aux->ChildRight->ChildLeft = _new;
+        aux->ChildRight = _new;
         ++size;
     }
-
- 
 
     //ELIMINACION
     void BeginningDisposal()
     {
         Node<TipoGen> *aux = beginning;
-        beginning = aux->next;
+        beginning = aux->ChildRight;
         delete aux;
         --size;
     }
 
     void FinalDisposal()
     {
-        Node<TipoGen> *aux = end->prev;
-        delete aux->next;
-        aux->next = nullptr;
+        Node<TipoGen> *aux = end->ChildLeft;
+        delete aux->ChildRight;
+        aux->ChildRight = nullptr;
         end = aux;
         --size;
     }
@@ -134,7 +112,7 @@ public:
             int i = 0;
             while (i != p - 1)
             {
-                aux = aux->next;
+                aux = aux->ChildRight;
                 i++;
             }
             return aux->data;
@@ -147,10 +125,10 @@ public:
         int i = 0;
         while (i != pos)
         {
-            aux = aux->next;
+            aux = aux->ChildRight;
             i++;
         }
-       return aux->data;
+        return aux->data;
     }
 
     //ordenamientos
@@ -161,19 +139,16 @@ public:
         int i = 0;
         while (i < p - 1)
         {
-            aux = aux->next;
+            aux = aux->ChildRight;
             i++;
         }
         aux->data = _data;
     }
 
-
-int getsize(){ return size;}
-
-
+    int getsize() { return size; }
 
     //Mostrar
-   /* void Show()
+    /* void Show()
     {
         int i = 1;
         Node<TipoGen> *aux = beginning;
@@ -183,7 +158,7 @@ int getsize(){ return size;}
             cout << "-------------Caroo" << i << " -----------------" << endl;
             cout << obj->mostrar();
             ++i;
-            aux = aux->next;
+            aux = aux->ChildRight;
         }
     }*/
 };

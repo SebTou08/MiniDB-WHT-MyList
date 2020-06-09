@@ -7,43 +7,24 @@
 #include <fstream>
 #include <sstream>
 #include <ctime>
+#include "Node.h"
 #include <stdlib.h>
 #include <algorithm>
 
 using namespace std;
 
-template <typename TypeGen>
-class BinaryTree;
-
-template <typename TypeGen>
-class Nodein
-{
-private:
-	TypeGen data;
-	Nodein<TypeGen> *ChildLeft;
-	Nodein<TypeGen> *ChildRight;
-	friend class BinaryTree<TypeGen>;
-
-public:
-	Nodein() {}
-	Nodein(TypeGen data)
-	{
-		ChildLeft = ChildRight = nullptr;
-		this->data = data;
-	}
-};
 
 template <typename TypeGen>
 class BinaryTree
 {
 private:
-	Nodein<TypeGen> *root;
+	Node<TypeGen> *root;
 
-	void _add(Nodein<TypeGen> *&node, TypeGen data)
+	void _add(Node<TypeGen> *&node, TypeGen data)
 	{
 		int a = rand() % 2;
 		if (node == nullptr)
-			node = new Nodein<TypeGen>(data);
+			node = new Node<TypeGen>(data);
 
 		else if (a == 0)
 		{
@@ -55,11 +36,11 @@ private:
 		}
 	}
 
-	void add(Nodein<TypeGen> *&node, TypeGen data, function<bool(TypeGen)> AddCritery)
+	void add(Node<TypeGen> *&node, TypeGen data, function<bool(TypeGen)> AddCritery)
 	{
 		if (node == nullptr)
 		{
-			node = new Nodein<TypeGen>(data);
+			node = new Node<TypeGen>(data);
 		}
 		else
 		{
@@ -74,7 +55,7 @@ private:
 	//to
 	//print
 	//------------------------------------------------------------------------------------
-	void inorder(Nodein<TypeGen> *node, function<void(TypeGen)> PrintCritery)
+	void inorder(Node<TypeGen> *node, function<void(TypeGen)> PrintCritery)
 	{
 		if (node == nullptr)
 		{
@@ -88,7 +69,7 @@ private:
 		}
 	}
 
-	void printthrown(Nodein<TypeGen> *bt, int spaces, function<void(TypeGen)> PrintCritery)
+	void printthrown(Node<TypeGen> *bt, int spaces, function<void(TypeGen)> PrintCritery)
 	{
 		if (bt != NULL)
 		{
@@ -100,7 +81,7 @@ private:
 		}
 	}
 
-	void printBT(const std::string &prefix, const Nodein<TypeGen> *node, bool isLeft, function<void(TypeGen)> PrintCritery)
+	void printBT(const std::string &prefix, const Node<TypeGen> *node, bool isLeft, function<void(TypeGen)> PrintCritery)
 	{
 		if (node != nullptr)
 		{
@@ -117,12 +98,12 @@ private:
 		}
 	}
 
-	void printBT(const Nodein<TypeGen> *node, function<void(TypeGen)> PrintCritery)
+	void printBT(const Node<TypeGen> *node, function<void(TypeGen)> PrintCritery)
 	{
 		printBT("", node, false, PrintCritery);
 	}
 
-	void printleft(Nodein<TypeGen> *node, function<void(TypeGen)> PrintCritery)
+	void printleft(Node<TypeGen> *node, function<void(TypeGen)> PrintCritery)
 	{
 		if (node == nullptr)
 		{
